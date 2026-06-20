@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BuildEx — Launching Soon</title>
+    <meta
+      name="description"
+      content="The freelance marketplace for Minecraft builders is almost here. Hire skilled builders or find paid work — with 3D previews, escrow-protected payments, and verified reviews."
+    />
+
+    <!-- Open Graph / social share -->
+    <meta property="og:title" content="BuildEx — Launching Soon" />
+    <meta
+      property="og:description"
+      content="The freelance marketplace for Minecraft builders is almost here."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts: same stack as the main site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Animated green gradient (ported from the main site) -->
+    <div class="gradient-background" aria-hidden="true"></div>
+    <div class="gradient-edge-glow" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="lp-header">
+      <a class="lp-logo logo-font" href="#">
+        Build<span class="lp-logo-accent">Ex</span>
+      </a>
+    </header>
+
+    <main>
+      <!-- Hero + countdown -->
+      <section class="lp-hero">
+        <span class="lp-pill">
+          <span class="lp-pill-dot"></span>
+          Launching soon
+        </span>
+
+        <h1 class="lp-title">
+          The marketplace for Minecraft<br />
+          builders is <span class="accent">almost here</span>.
+        </h1>
+
+        <p class="lp-subtitle">
+          Hire skilled builders or find paid work — with interactive 3D previews,
+          escrow-protected payments, and reviews you can actually trust.
+        </p>
+
+        <!-- Countdown -->
+        <div id="countdown" class="lp-countdown" role="timer" aria-live="off">
+          <div class="lp-time glass">
+            <span class="lp-time-num" data-unit="days">--</span>
+            <span class="lp-time-label">Days</span>
+          </div>
+          <div class="lp-time glass">
+            <span class="lp-time-num" data-unit="hours">--</span>
+            <span class="lp-time-label">Hours</span>
+          </div>
+          <div class="lp-time glass">
+            <span class="lp-time-num" data-unit="minutes">--</span>
+            <span class="lp-time-label">Minutes</span>
+          </div>
+          <div class="lp-time glass">
+            <span class="lp-time-num" data-unit="seconds">--</span>
+            <span class="lp-time-label">Seconds</span>
+          </div>
+        </div>
+
+        <!-- Live state (revealed when the timer hits zero) -->
+        <div id="live-state" class="lp-live" hidden>
+          <p class="lp-live-text">
+            <span class="accent">We're live.</span> BuildEx is open for builders and buyers.
+          </p>
+          <a id="enter-btn" class="lp-btn lp-btn-primary lp-btn-lg" href="#">
+            Enter BuildEx
+            <i data-lucide="arrow-right" class="lp-btn-icon"></i>
+          </a>
+        </div>
+
+        <!-- Social / Discord CTAs -->
+        <div class="lp-cta">
+          <a id="discord-btn" class="lp-btn lp-btn-primary" href="#" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="message-circle"></i>
+            Join the Discord
+          </a>
+          <div id="socials" class="lp-socials"></div>
+        </div>
+      </section>
+
+      <!-- Feature cards -->
+      <section class="lp-features">
+        <div class="lp-features-head">
+          <span class="lp-pill">
+            <span class="lp-pill-dot"></span>
+            Why BuildEx
+          </span>
+          <h2 class="lp-features-title">
+            Built for serious <span class="accent">creators</span>
+          </h2>
+          <p class="lp-features-sub">
+            A preview of the features that make hiring and selling Minecraft builds
+            safe, transparent, and effortless.
+          </p>
+        </div>
+
+        <div id="features-grid" class="lp-grid"></div>
+      </section>
+    </main>
+
+    <footer class="lp-footer">
+      © 2026 BuildEx — The Freelance Marketplace for Minecraft Builders
+    </footer>
+
+    <!-- lucide icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="./config.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
