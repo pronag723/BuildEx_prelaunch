@@ -410,12 +410,26 @@
   // <em> in copy is intentional emphasis, so allow it through after escaping.
   function hiwBody(s) { return esc(s).replace(/&lt;em&gt;/g, "<em>").replace(/&lt;\/em&gt;/g, "</em>"); }
 
-  var HIW_ARROW =
-    '<div class="hiw-arrow" aria-hidden="true">' +
-      '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">' +
-        '<path d="M10 4v12M6 12l4 4 4-4"/>' +
+  // Curated zig-zag positions (side + resting tilt) so cards feel scattered, not stacked.
+  var HIW_POS = [
+    { side: "left",   rot: "-2deg"   },
+    { side: "right",  rot: "2deg"    },
+    { side: "left",   rot: "-1.4deg" },
+    { side: "right",  rot: "1.6deg"  },
+    { side: "center", rot: "-1deg"   }
+  ];
+
+  // One hand-drawn curved arrow; mirrored via CSS (.hiw-arrow--left) for the other direction.
+  // pathLength="1" normalises the stroke so the dash-draw timing is identical regardless of size.
+  function hiwArrow(dir) {
+    return '<div class="hiw-arrow hiw-arrow--' + dir + '" aria-hidden="true">' +
+      '<svg class="hiw-arrow-svg" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path class="hiw-arrow-path" pathLength="1" ' +
+          'd="M58 12 C58 62 182 56 182 104 l -10 -9 m 10 9 l 9 -10" ' +
+          'stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>' +
       '</svg>' +
     '</div>';
+  }
 
   function setupHowItWorks() {
     var timeline = document.getElementById("hiw-timeline");
@@ -447,7 +461,8 @@
     function renderTimeline(role) {
       var steps = HIW_STEPS[role] || HIW_STEPS.client;
       timeline.innerHTML = steps.map(function (s, i) {
-        var step = '<div class="hiw-step glass">' +
+        var pos = HIW_POS[i] || { side: "center", rot: "0deg" };
+        var step = '<div class="hiw-step hiw-' + pos.side + '" style="--rot:' + pos.rot + '">' +
           '<span class="hiw-step-icon icon-tile icon-tile-lg">' +
             '<i data-lucide="' + s.icon + '"></i>' +
             '<span class="hiw-step-index">' + (i + 1) + "</span>" +
@@ -457,7 +472,10 @@
             '<p class="hiw-step-body">' + hiwBody(s.body) + "</p>" +
           "</div>" +
         "</div>";
-        return i < steps.length - 1 ? step + HIW_ARROW : step;
+        if (i >= steps.length - 1) return step;
+        // Arrow bends toward the next card's side: a card on the right feeds a leftward curve.
+        var dir = pos.side === "right" ? "left" : "right";
+        return step + hiwArrow(dir);
       }).join("");
 
       if (window.lucide && typeof window.lucide.createIcons === "function") {
