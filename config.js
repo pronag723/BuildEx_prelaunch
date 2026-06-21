@@ -16,6 +16,7 @@ window.LAUNCH = {
   SOCIALS: [
     { label: "YouTube",    url: "https://youtube.com/@REPLACE_ME", platform: "youtube" },
     { label: "X / Twitter", url: "https://x.com/REPLACE_ME",       platform: "x"       },
-    { label: "TikTok",     url: "https://tiktok.com/@REPLACE_ME",  platform: "tiktok"  }
+    { label: "TikTok",     url: "https://tiktok.com/@REPLACE_ME",  platform: "tiktok"  },
+    { label: "Reddit",     url: "https://reddit.com/r/REPLACE_ME", platform: "reddit"  }
   ]
 };
