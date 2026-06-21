@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=6" />
   </head>
   <body>
     <div class="gradient-background" aria-hidden="true"></div>
@@ -67,6 +67,34 @@
         </div>
       </section>
 
+      <!-- How it works — role-toggle scroll-reveal timeline -->
+      <section class="lp-howitworks">
+        <div class="lp-features-head">
+          <span class="lp-pill"><span class="lp-pill-dot"></span>How it works</span>
+          <h2 class="lp-features-title">From idea to <span class="accent">finished build</span></h2>
+          <p class="lp-features-sub">
+            Two sides, one smooth workflow. Pick your role to see how BuildEx works for you.
+          </p>
+        </div>
+
+        <!-- Role toggle (Client / Builder) -->
+        <div class="hiw-toggle" role="tablist" aria-label="Choose your role">
+          <span class="hiw-toggle-thumb" aria-hidden="true"></span>
+          <button class="hiw-toggle-btn is-active" role="tab" id="hiw-tab-client"
+            data-role="client" aria-selected="true" aria-controls="hiw-timeline">
+            <i data-lucide="search"></i>I'm a client
+          </button>
+          <button class="hiw-toggle-btn" role="tab" id="hiw-tab-builder"
+            data-role="builder" aria-selected="false" aria-controls="hiw-timeline" tabindex="-1">
+            <i data-lucide="hammer"></i>I'm a builder
+          </button>
+        </div>
+
+        <!-- Timeline (populated by script.js) -->
+        <div id="hiw-timeline" class="hiw-timeline" role="tabpanel"
+          aria-labelledby="hiw-tab-client"></div>
+      </section>
+
       <!-- Feature card deck -->
       <section class="lp-features">
         <div class="lp-features-head">
@@ -103,7 +131,7 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="./config.js?v=5"></script>
-    <script src="./script.js?v=5"></script>
+    <script src="./config.js?v=6"></script>
+    <script src="./script.js?v=6"></script>
   </body>
 </html>

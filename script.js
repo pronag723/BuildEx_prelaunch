@@ -389,12 +389,124 @@
     start();
   }
 
+  /* ── How it works (role-toggle scroll-reveal timeline) ─────────────────── */
+  var HIW_STEPS = {
+    client: [
+      { icon: "users",         title: "Browse & choose your builder",       body: "Filter by style, rank, and price, then compare portfolios, ratings, and verified reviews to find your perfect match." },
+      { icon: "lock",          title: "Place your order, secured by escrow", body: "Pick a build size, describe your vision, and pay. Your money sits safely in escrow until <em>you</em> approve the result." },
+      { icon: "message-circle",title: "Discuss every detail in chat",        body: "Message your builder directly — share references, refine the brief, and stay in the loop in real time." },
+      { icon: "box",           title: "Review it in an interactive 3D preview", body: "Explore the finished world right in your browser — spin, zoom, and inspect every block before you commit." },
+      { icon: "party-popper",  title: "Approve & enjoy your build",          body: "Happy with it? Confirm delivery to release payment, download your world, and leave a review." }
+    ],
+    builder: [
+      { icon: "user-round",    title: "Build your profile & portfolio",      body: "Show off your best work, set your styles and rates, and let clients discover you." },
+      { icon: "trophy",        title: "Get hired & climb the ranks",         body: "Land orders through the catalog. Complete work and earn great reviews to rise from Rookie to Master — and pay lower fees." },
+      { icon: "shield-check",  title: "Accept the job — escrow has your back", body: "When a client pays, the funds are locked in escrow. Accept the order and build with total confidence." },
+      { icon: "message-circle",title: "Create & collaborate in chat",        body: "Keep the client in sync, share progress, and nail the brief with built-in messaging." },
+      { icon: "wallet",        title: "Deliver & get paid",                  body: "Upload your world with a 3D preview. Once the client approves, your earnings go straight to your wallet." }
+    ]
+  };
+
+  // <em> in copy is intentional emphasis, so allow it through after escaping.
+  function hiwBody(s) { return esc(s).replace(/&lt;em&gt;/g, "<em>").replace(/&lt;\/em&gt;/g, "</em>"); }
+
+  var HIW_ARROW =
+    '<div class="hiw-arrow" aria-hidden="true">' +
+      '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M10 4v12M6 12l4 4 4-4"/>' +
+      '</svg>' +
+    '</div>';
+
+  function setupHowItWorks() {
+    var timeline = document.getElementById("hiw-timeline");
+    var toggle   = document.querySelector(".hiw-toggle");
+    if (!timeline || !toggle) return;
+
+    var btns = Array.prototype.slice.call(toggle.querySelectorAll(".hiw-toggle-btn"));
+    var observer = null;
+
+    function reveal(el) { el.classList.add("is-visible"); }
+
+    function observeSteps() {
+      var items = timeline.querySelectorAll(".hiw-step, .hiw-arrow");
+      if (reduced || !("IntersectionObserver" in window)) {
+        items.forEach(reveal);
+        return;
+      }
+      observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            reveal(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.2 });
+      items.forEach(function (el) { observer.observe(el); });
+    }
+
+    function renderTimeline(role) {
+      var steps = HIW_STEPS[role] || HIW_STEPS.client;
+      timeline.innerHTML = steps.map(function (s, i) {
+        var step = '<div class="hiw-step glass">' +
+          '<span class="hiw-step-icon icon-tile icon-tile-lg">' +
+            '<i data-lucide="' + s.icon + '"></i>' +
+            '<span class="hiw-step-index">' + (i + 1) + "</span>" +
+          "</span>" +
+          '<div class="hiw-step-text">' +
+            '<h3 class="hiw-step-title">' + esc(s.title) + "</h3>" +
+            '<p class="hiw-step-body">' + hiwBody(s.body) + "</p>" +
+          "</div>" +
+        "</div>";
+        return i < steps.length - 1 ? step + HIW_ARROW : step;
+      }).join("");
+
+      if (window.lucide && typeof window.lucide.createIcons === "function") {
+        window.lucide.createIcons();
+      }
+      observeSteps();
+    }
+
+    function selectRole(role) {
+      if (observer) { observer.disconnect(); observer = null; }
+      toggle.classList.toggle("is-builder", role === "builder");
+      btns.forEach(function (b) {
+        var active = b.getAttribute("data-role") === role;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-selected", String(active));
+        b.tabIndex = active ? 0 : -1;
+      });
+      timeline.setAttribute("aria-labelledby", "hiw-tab-" + role);
+
+      if (reduced) { renderTimeline(role); return; }
+      timeline.classList.add("is-swapping");
+      setTimeout(function () {
+        renderTimeline(role);
+        timeline.classList.remove("is-swapping");
+      }, 250);
+    }
+
+    btns.forEach(function (b, i) {
+      b.addEventListener("click", function () { selectRole(b.getAttribute("data-role")); });
+      b.addEventListener("keydown", function (e) {
+        var dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!dir) return;
+        e.preventDefault();
+        var next = btns[(i + dir + btns.length) % btns.length];
+        next.focus();
+        selectRole(next.getAttribute("data-role"));
+      });
+    });
+
+    renderTimeline("client");
+  }
+
   /* ── Init ───────────────────────────────────────────────────────────────── */
   function init() {
     renderDeck();
     setupDeck();
     renderCtas();
     setupCountdown();
+    setupHowItWorks();
     setupGradient();
     if (window.lucide && typeof window.lucide.createIcons === "function") {
       window.lucide.createIcons();
