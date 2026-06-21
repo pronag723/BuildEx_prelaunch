@@ -454,9 +454,15 @@ body {
 }
 .hiw-timeline.is-swapping { opacity: 0; }
 
-/* Step card */
+/* Step card — outer layer handles the scroll entrance, inner layer the hover */
 .hiw-step {
   width: min(70%, 470px);
+  opacity: 0;
+  transform: translateX(var(--from,0)) translateY(40px) rotate(var(--rot,0deg)) scale(.93);
+  transition: opacity .75s var(--ease), transform .8s var(--ease);
+}
+.hiw-step.is-visible { opacity: 1; transform: rotate(var(--rot,0deg)); }
+.hiw-step-inner {
   display: flex; align-items: flex-start; gap: 18px;
   padding: 24px 26px; border-radius: 22px;
   background:
@@ -464,16 +470,17 @@ body {
     rgba(26,26,26,.92);
   border: 1px solid rgba(255,255,255,.10);
   box-shadow: 0 18px 44px -26px rgba(0,0,0,.85);
-  opacity: 0;
-  transform: translateX(var(--from,0)) translateY(40px) rotate(var(--rot,0deg)) scale(.93);
-  transition: opacity .75s var(--ease), transform .8s var(--ease),
-    border-color .35s ease, box-shadow .35s ease;
+  transition: transform .4s var(--ease), border-color .4s ease, box-shadow .4s ease;
 }
-.hiw-step.is-visible { opacity: 1; transform: rotate(var(--rot,0deg)); }
-.hiw-step:hover {
-  transform: rotate(0deg) translateY(-6px) !important;
-  border-color: rgba(74,222,128,.38);
-  box-shadow: 0 28px 54px -26px rgba(0,0,0,.9), 0 0 34px -10px rgba(74,222,128,.4);
+.hiw-step:hover .hiw-step-inner {
+  transform: translateY(-7px);
+  border-color: rgba(74,222,128,.42);
+  box-shadow: 0 30px 56px -26px rgba(0,0,0,.92), 0 0 38px -10px rgba(74,222,128,.48);
+}
+.hiw-step:hover .icon-tile {
+  transform: scale(1.1) rotate(-5deg);
+  background: rgba(74,222,128,.2);
+  border-color: rgba(74,222,128,.55);
 }
 .hiw-left   { align-self: flex-start; --from: -54px; margin-left: clamp(0px,2.5vw,22px); }
 .hiw-right  { align-self: flex-end;   --from:  54px; margin-right: clamp(0px,2.5vw,22px); }
@@ -505,7 +512,10 @@ body {
   margin: 2px 0;
   color: var(--accent);
   display: block; pointer-events: none;
+  opacity: 0;
+  transition: opacity .7s var(--ease);
 }
+.hiw-arrow.is-visible { opacity: 1; }
 .hiw-arrow-svg {
   width: 100%; height: 100%;
   overflow: visible;
@@ -550,8 +560,9 @@ body {
   body, .lp-btn-primary, .lp-btn-discord, .lp-pill-dot { animation: none; }
   .lp-time-num.tick { animation: none; }
   .fd-voxel         { animation: none; }
-  .hiw-toggle-thumb, .hiw-toggle-btn i { transition: none; }
-  .hiw-step, .hiw-arrow-path { transition: none; }
-  .hiw-step { opacity: 1; transform: rotate(var(--rot,0deg)); }
-  .hiw-arrow-path { stroke-dashoffset: 0; }
+  /* Keep gentle opacity fade-ins + the switcher transition (accessibility-safe);
+     only drop the large slide/scale/rotate movement and the arrow self-draw. */
+  .hiw-step { transform: none; }
+  .hiw-step.is-visible { transform: none; }
+  .hiw-arrow-path { stroke-dashoffset: 0; transition: none; }
 }

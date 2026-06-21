@@ -443,7 +443,8 @@
 
     function observeSteps() {
       var items = timeline.querySelectorAll(".hiw-step, .hiw-arrow");
-      if (reduced || !("IntersectionObserver" in window)) {
+      // Always reveal on scroll (CSS keeps it an opacity-only fade under reduced-motion).
+      if (!("IntersectionObserver" in window)) {
         items.forEach(reveal);
         return;
       }
@@ -463,13 +464,15 @@
       timeline.innerHTML = steps.map(function (s, i) {
         var pos = HIW_POS[i] || { side: "center", rot: "0deg" };
         var step = '<div class="hiw-step hiw-' + pos.side + '" style="--rot:' + pos.rot + '">' +
-          '<span class="hiw-step-icon icon-tile icon-tile-lg">' +
-            '<i data-lucide="' + s.icon + '"></i>' +
-            '<span class="hiw-step-index">' + (i + 1) + "</span>" +
-          "</span>" +
-          '<div class="hiw-step-text">' +
-            '<h3 class="hiw-step-title">' + esc(s.title) + "</h3>" +
-            '<p class="hiw-step-body">' + hiwBody(s.body) + "</p>" +
+          '<div class="hiw-step-inner">' +
+            '<span class="hiw-step-icon icon-tile icon-tile-lg">' +
+              '<i data-lucide="' + s.icon + '"></i>' +
+              '<span class="hiw-step-index">' + (i + 1) + "</span>" +
+            "</span>" +
+            '<div class="hiw-step-text">' +
+              '<h3 class="hiw-step-title">' + esc(s.title) + "</h3>" +
+              '<p class="hiw-step-body">' + hiwBody(s.body) + "</p>" +
+            "</div>" +
           "</div>" +
         "</div>";
         if (i >= steps.length - 1) return step;
@@ -495,7 +498,6 @@
       });
       timeline.setAttribute("aria-labelledby", "hiw-tab-" + role);
 
-      if (reduced) { renderTimeline(role); return; }
       timeline.classList.add("is-swapping");
       setTimeout(function () {
         renderTimeline(role);
