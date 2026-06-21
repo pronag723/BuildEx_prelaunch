@@ -8,10 +8,12 @@
     <meta property="og:title" content="BuildEx — Launching Soon" />
     <meta property="og:description" content="The freelance marketplace for Minecraft builders is almost here." />
     <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=1" />
+    <link rel="apple-touch-icon" href="./favicon.svg?v=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css?v=6" />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?v=7" />
   </head>
   <body>
     <div class="gradient-background" aria-hidden="true"></div>
@@ -24,20 +26,20 @@
     <main>
       <!-- Hero + countdown -->
       <section class="lp-hero">
-        <span class="lp-pill"><span class="lp-pill-dot"></span>Launching soon</span>
+        <span class="lp-pill reveal" style="transition-delay:.05s"><span class="lp-pill-dot"></span>Launching soon</span>
 
-        <h1 class="lp-title">
+        <h1 class="lp-title reveal" style="transition-delay:.12s">
           The marketplace for Minecraft<br />
           builders is <span class="accent">almost here</span>.
         </h1>
 
-        <p class="lp-subtitle">
+        <p class="lp-subtitle reveal" style="transition-delay:.19s">
           Hire skilled builders or find paid work — with interactive 3D previews,
           escrow-protected payments, and reviews you can actually trust.
         </p>
 
         <!-- Countdown -->
-        <div id="countdown" class="lp-countdown" role="timer" aria-live="off">
+        <div id="countdown" class="lp-countdown reveal" style="transition-delay:.26s" role="timer" aria-live="off">
           <div class="lp-time glass"><span class="lp-time-num" data-unit="days">--</span><span class="lp-time-label">Days</span></div>
           <div class="lp-time glass"><span class="lp-time-num" data-unit="hours">--</span><span class="lp-time-label">Hours</span></div>
           <div class="lp-time glass"><span class="lp-time-num" data-unit="minutes">--</span><span class="lp-time-label">Minutes</span></div>
@@ -54,7 +56,7 @@
         </div>
 
         <!-- CTAs -->
-        <div class="lp-cta">
+        <div class="lp-cta reveal" style="transition-delay:.33s">
           <!-- Discord button — brand SVG, blurple colour -->
           <a id="discord-btn" class="lp-btn lp-btn-discord" href="#" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -69,7 +71,7 @@
 
       <!-- How it works — role-toggle scroll-reveal timeline -->
       <section class="lp-howitworks">
-        <div class="lp-features-head">
+        <div class="lp-features-head reveal">
           <span class="lp-pill"><span class="lp-pill-dot"></span>How it works</span>
           <h2 class="lp-features-title">From idea to <span class="accent">finished build</span></h2>
           <p class="lp-features-sub">
@@ -78,7 +80,7 @@
         </div>
 
         <!-- Role toggle (Client / Builder) -->
-        <div class="hiw-toggle" role="tablist" aria-label="Choose your role">
+        <div class="hiw-toggle reveal" style="transition-delay:.08s" role="tablist" aria-label="Choose your role">
           <span class="hiw-toggle-thumb" aria-hidden="true"></span>
           <button class="hiw-toggle-btn is-active" role="tab" id="hiw-tab-client"
             data-role="client" aria-selected="true" aria-controls="hiw-timeline">
@@ -97,7 +99,7 @@
 
       <!-- Feature card deck -->
       <section class="lp-features">
-        <div class="lp-features-head">
+        <div class="lp-features-head reveal">
           <span class="lp-pill"><span class="lp-pill-dot"></span>Why BuildEx</span>
           <h2 class="lp-features-title">Built for serious <span class="accent">creators</span></h2>
           <p class="lp-features-sub">
@@ -106,11 +108,11 @@
           </p>
         </div>
 
-        <div class="features-deck-wrap">
+        <div class="features-deck-wrap reveal" style="transition-delay:.1s">
           <div id="fd-deck" class="features-deck" role="group" aria-roledescription="carousel" aria-label="BuildEx features"></div>
         </div>
 
-        <div class="fd-controls">
+        <div class="fd-controls reveal" style="transition-delay:.18s">
           <button class="features-arrow" id="fd-prev" aria-label="Previous feature">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="transform:rotate(180deg)">
               <path d="M5 10h10M11 6l4 4-4 4"/>
@@ -131,7 +133,7 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="./config.js?v=6"></script>
-    <script src="./script.js?v=6"></script>
+    <script src="./config.js?v=7"></script>
+    <script src="./script.js?v=7"></script>
   </body>
 </html>

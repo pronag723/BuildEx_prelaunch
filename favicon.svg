@@ -1,0 +1,13 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BuildEx">
+  <!-- Rounded-square app tile (the "gray area" — black padding cropped out) -->
+  <rect x="2" y="2" width="96" height="96" rx="24" ry="24" fill="#1e1e1e"/>
+  <!-- Green accent square at the top of the stem -->
+  <rect x="34" y="24" width="12" height="12" fill="#4ade80"/>
+  <!-- White geometric "b": stem + chamfered bowl with a square counter -->
+  <g fill="#ffffff">
+    <rect x="34" y="39" width="12" height="47"/>
+    <path d="M34 54 H66 L74 62 V86 H34 Z"/>
+  </g>
+  <!-- Counter (hole) punched out of the bowl, chamfer mirrors the bowl -->
+  <path d="M47 65 H59 L63 69 V78 H47 Z" fill="#1e1e1e"/>
+</svg>

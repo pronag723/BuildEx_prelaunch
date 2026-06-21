@@ -520,6 +520,22 @@
     renderTimeline("client");
   }
 
+  /* ── Generic scroll reveal (hero + feature blocks) ─────────────────────── */
+  function setupReveal() {
+    var els = document.querySelectorAll(".reveal");
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(els, function (el) { el.classList.add("is-visible"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
+    Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+  }
+
   /* ── Init ───────────────────────────────────────────────────────────────── */
   function init() {
     renderDeck();
@@ -527,6 +543,7 @@
     renderCtas();
     setupCountdown();
     setupHowItWorks();
+    setupReveal();
     setupGradient();
     if (window.lucide && typeof window.lucide.createIcons === "function") {
       window.lucide.createIcons();

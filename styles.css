@@ -25,8 +25,15 @@ body {
 
 @keyframes pageLoad { from { opacity: 0; } to { opacity: 1; } }
 
-.logo-font { font-family: "Quicksand", "Space Grotesk", "Inter", system-ui, sans-serif; }
+.logo-font { font-family: "Chakra Petch", "Space Grotesk", "Inter", system-ui, sans-serif; }
 .accent { color: var(--accent); }
+
+/* ══════════════════ SCROLL REVEAL ══════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
 
 /* ══════════════════ ANIMATED GRADIENT ══════════════════
    Ported verbatim from app/globals.css.
@@ -102,8 +109,9 @@ body {
   padding: 32px 24px 0;
 }
 .lp-logo {
-  font-size: 1.75rem; font-weight: 700;
-  letter-spacing: -.01em; color: #fff; text-decoration: none;
+  font-size: 1.85rem; font-weight: 600;
+  letter-spacing: .01em; color: #fff; text-decoration: none;
+  text-transform: lowercase;
 }
 .lp-logo-accent { color: var(--accent); }
 
@@ -410,7 +418,7 @@ body {
 .lp-howitworks {
   position: relative; z-index: 1;
   max-width: 840px; margin: 0 auto;
-  padding: clamp(40px,8vw,80px) 24px clamp(24px,5vw,48px);
+  padding: clamp(80px,14vw,150px) 24px clamp(24px,5vw,48px);
 }
 
 /* Role toggle — springy sliding thumb */
@@ -562,6 +570,7 @@ body {
   .fd-voxel         { animation: none; }
   /* Keep gentle opacity fade-ins + the switcher transition (accessibility-safe);
      only drop the large slide/scale/rotate movement and the arrow self-draw. */
+  .reveal { transform: none; }
   .hiw-step { transform: none; }
   .hiw-step.is-visible { transform: none; }
   .hiw-arrow-path { stroke-dashoffset: 0; transition: none; }
