@@ -184,9 +184,9 @@
         card.style.pointerEvents = front ? "auto" : "none";
         card.setAttribute("aria-hidden", String(!front));
         card.classList.toggle("is-front", front);
-        card.style.transition   = reduced || (dragging && front)
+        card.style.transition   = (dragging && front)
           ? "none"
-          : "transform .45s cubic-bezier(.4,0,.2,1), opacity .45s";
+          : "transform .55s cubic-bezier(.4,0,.2,1), opacity .5s ease";
       });
       dots().forEach(function (d, i) { d.classList.toggle("is-active", i === active); });
     }
@@ -327,60 +327,61 @@
     timer = setInterval(tick, 1000);
   }
 
-  /* ── Mouse-following interactive gradient ──────────────────────────────── */
+  /* ── Scroll-driven gradient (mirrors useGradientBackground.js exactly) ── */
   function setupGradient() {
     var gb = document.querySelector(".gradient-background");
     var eg = document.querySelector(".gradient-edge-glow");
     if (!gb || !eg) return;
 
-    var mx = 50, my = 50;     // raw mouse %
-    var cx1 = 30, cy1 = 25;   // current blob-1 position
-    var cx2 = 70, cy2 = 65;   // current blob-2 position
-    var hasMouse = false;
+    var cfg = { edgeOffset: 12, speed: 1, smoothing: 0.08, idleDrift: 0.00003, swayAmp: 0.015, swaySpeed: 0.0004 };
+    var cp1 = 0, cp2 = 0.5, tp1 = 0, tp2 = 0.5;
+    var lastScroll = window.pageYOffset || 0;
+    var raf = 0;
 
-    document.addEventListener("mousemove", function (e) {
-      mx = (e.clientX / window.innerWidth)  * 100;
-      my = (e.clientY / window.innerHeight) * 100;
-      hasMouse = true;
-    });
-
-    function update(t) {
-      var d = t * 0.00025; // slow drift phase
-      var tx1, ty1, tx2, ty2;
-
-      if (hasMouse) {
-        // blob 1: follows cursor closely with gentle sway
-        tx1 = mx + Math.sin(d * 0.7) * 7;
-        ty1 = my + Math.cos(d * 0.5) * 6;
-        // blob 2: counter-side of screen — creates contrast
-        tx2 = 100 - mx * 0.55 + Math.cos(d * 0.4) * 9;
-        ty2 = 100 - my * 0.55 + Math.sin(d * 0.6) * 8;
-      } else {
-        // idle: organic Lissajous-like drift
-        tx1 = 30 + Math.sin(d) * 22        + Math.cos(d * 0.7) * 14;
-        ty1 = 25 + Math.cos(d * 0.8) * 18  + Math.sin(d * 0.5) * 10;
-        tx2 = 70 + Math.cos(d * 0.6) * 18  + Math.sin(d * 0.9) * 12;
-        ty2 = 65 + Math.sin(d * 0.7) * 16  + Math.cos(d * 0.4) * 14;
+    function periToXY(p, off) {
+      var pp  = ((p % 1) + 1) % 1;
+      var seg = pp * 4;
+      var si  = Math.floor(seg);
+      var sp  = seg - si;
+      switch (si) {
+        case 0:  return { x: off + sp * (100 - off * 2),           y: off                              };
+        case 1:  return { x: 100 - off,                            y: off + sp * (100 - off * 2)       };
+        case 2:  return { x: 100 - off - sp * (100 - off * 2),    y: 100 - off                        };
+        default: return { x: off,                                  y: 100 - off - sp * (100 - off * 2) };
       }
-
-      // Smooth lerp — blob 1 is faster (feels more responsive to cursor)
-      cx1 += (tx1 - cx1) * 0.05;
-      cy1 += (ty1 - cy1) * 0.05;
-      cx2 += (tx2 - cx2) * 0.028;
-      cy2 += (ty2 - cy2) * 0.028;
-
-      gb.style.setProperty("--gradient-x",  cx1.toFixed(1) + "%");
-      gb.style.setProperty("--gradient-y",  cy1.toFixed(1) + "%");
-      gb.style.setProperty("--gradient-x2", cx2.toFixed(1) + "%");
-      gb.style.setProperty("--gradient-y2", cy2.toFixed(1) + "%");
-
-      // Edge glow breathes slowly
-      eg.style.opacity = (0.45 + Math.sin(t * 0.0003) * 0.15).toFixed(3);
-
-      requestAnimationFrame(update);
     }
 
-    requestAnimationFrame(update);
+    function tick(ts) {
+      var sy    = window.pageYOffset || 0;
+      var delta = sy - lastScroll;
+      if (Math.abs(delta) > 0) { tp1 += delta * 0.0008 * cfg.speed; tp2 -= delta * 0.0006 * cfg.speed; }
+      tp1 += cfg.idleDrift;
+      tp2 -= cfg.idleDrift * 0.7;
+      lastScroll = sy;
+      tp1 = ((tp1 % 1) + 1) % 1;
+      tp2 = ((tp2 % 1) + 1) % 1;
+      var d1 = tp1 - cp1; if (d1 >  0.5) d1 -= 1; if (d1 < -0.5) d1 += 1;
+      var d2 = tp2 - cp2; if (d2 >  0.5) d2 -= 1; if (d2 < -0.5) d2 += 1;
+      cp1 += d1 * cfg.smoothing;
+      cp2 += d2 * cfg.smoothing;
+      var sw1 = Math.sin(ts * cfg.swaySpeed) * cfg.swayAmp;
+      var sw2 = Math.cos(ts * cfg.swaySpeed * 1.3) * cfg.swayAmp * 0.8;
+      var p1  = periToXY(cp1 + sw1, cfg.edgeOffset);
+      var p2  = periToXY(cp2 + sw2, cfg.edgeOffset + 3);
+      gb.style.setProperty("--gradient-x",  p1.x.toFixed(1) + "%");
+      gb.style.setProperty("--gradient-y",  p1.y.toFixed(1) + "%");
+      gb.style.setProperty("--gradient-x2", p2.x.toFixed(1) + "%");
+      gb.style.setProperty("--gradient-y2", p2.y.toFixed(1) + "%");
+      var breathe = 1 + Math.sin(ts * 0.0003) * 0.12;
+      eg.style.opacity = (0.45 + breathe * 0.2).toFixed(3);
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() { if (!raf) { lastScroll = window.pageYOffset || 0; raf = requestAnimationFrame(tick); } }
+    function stop()  { if (raf)  { cancelAnimationFrame(raf); raf = 0; } }
+
+    document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else start(); });
+    start();
   }
 
   /* ── Init ───────────────────────────────────────────────────────────────── */
