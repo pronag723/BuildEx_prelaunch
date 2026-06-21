@@ -217,7 +217,7 @@
       if (!card) return;
       dragging = true;
       startX   = e.clientX;
-      card.setPointerCapture(e.pointerId);
+      deck.setPointerCapture(e.pointerId);
     });
     deck.addEventListener("pointermove", function (e) {
       if (!dragging) return;
@@ -332,7 +332,7 @@
   function setupGradient() {
     var gb = document.querySelector(".gradient-background");
     var eg = document.querySelector(".gradient-edge-glow");
-    if (!gb || !eg || reduced) return;
+    if (!gb || !eg) return;
 
     var mx = 50, my = 50;     // raw mouse %
     var cx1 = 30, cy1 = 25;   // current blob-1 position
@@ -387,6 +387,7 @@
   /* ── Init ───────────────────────────────────────────────────────────────── */
   function init() {
     renderDeck();
+    setupDeck();
     renderCtas();
     setupCountdown();
     setupGradient();
