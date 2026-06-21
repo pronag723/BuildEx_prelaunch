@@ -213,13 +213,12 @@
     });
 
     deck.addEventListener("pointerdown", function (e) {
-      var card = e.target.closest(".is-front");
-      if (!card) return;
+      if (!e.target.closest(".is-front")) return;
       dragging = true;
       startX   = e.clientX;
-      deck.setPointerCapture(e.pointerId);
+      dx       = 0;
     });
-    deck.addEventListener("pointermove", function (e) {
+    document.addEventListener("pointermove", function (e) {
       if (!dragging) return;
       dx = e.clientX - startX;
       layout();
@@ -227,12 +226,12 @@
     function endDrag() {
       if (!dragging) return;
       dragging = false;
-      if      (dx <= -110) go(1);
-      else if (dx >=  110) go(-1);
+      if      (dx <= -80) go(1);
+      else if (dx >=  80) go(-1);
       else { dx = 0; layout(); }
     }
-    deck.addEventListener("pointerup",     endDrag);
-    deck.addEventListener("pointercancel", endDrag);
+    document.addEventListener("pointerup",     endDrag);
+    document.addEventListener("pointercancel", endDrag);
 
     layout();
   }
